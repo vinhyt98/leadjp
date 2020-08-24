@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<style type="text/css">
+		html, body {
+			height: 100%;
+			width: 100%
+		}
+
+		.show {
+			display: flex;
+		}
+
+		.item {
+			margin: 12px;
+			width: 120px;
+			height: 120px;
+			background: black;
+			color: white;
+			border-radius: 100px;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			font-size: 44px;
+		}
+
+
+		.control {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+		}
+
+		.mode {
+			margin-top: 14px 
+		}
+
+		button {
+			width: 130px;
+			height: 40px;
+		}
+
+		.show-suggest {
+			font-size: 44px;
+			width: 80%;
+			padding: 20px;
+			max-width: 400px;
+			display: flex;
+			flex-wrap: wrap;
+			justify-content: space-around; 
+		}
+
+		.show-item {
+			margin: 12px
+		}
+	</style>
+</head>
+<body>
+	<div style="display: flex; width: 100%; height: 100%; align-items: center; justify-content: center; flex-direction: column;">
+		<div class="show-suggest">
+			<div class="show-item" id="show-hira"></div>
+			<div class="show-item" id="show-kata"></div>
+			<div class="show-item" id="show-read"></div>
+		</div>
+		<div class="show">
+			<div class="item" id='read'></div>
+			<div class="item" id='write'></div>
+		</div>
+		<div class="control">
+			<div class="mode">
+				<button id='next' onclick="next()">Next</button>
+				<button id='show' onclick="show()">Show</button>
+			</div>
+			<div class="mode">
+				<button id="type" onclick="changeType()">hira</button>
+				<button id="mode" onclick="changeMode()">read</button>
+			</div>
+		</div>
+	</div>
+
+	<script type="text/javascript">
+		const HIRA = 'hira';
+		const KATA = 'kata';
+		const READ = 'read';
+		const WRITE = 'write';
+		let current = null;
+
+		let type = HIRA;
+		let mode = READ;
+		let data = [
+			{
+				read: 'a',
+				hira: 'ぁ',
+				kata: 'ア'
+			},
+			{
+				read: 'i',
+				hira: 'ぃ',
+				kata: 'イ'
+			},
+			{
+				read: 'u',
+				hira: 'う',
+				kata: 'ウ'
+			},
+			{
+				read: 'e',
+				hira: 'ぇ',
+				kata: 'エ'
+			},
+			{
+				read: 'o',
+				hira: 'ぉ',
+				kata: 'オ'
+			},
+			{
+				read: 'ka',
+				hira: 'か',
+				kata: 'カ'
+			},
+			{
+				read: 'ki',
+				hira: 'き',
+				kata: 'キ'
+			},
+			{
+				read: 'ku',
+				hira: 'く',
+				kata: 'ク'
+			},
+			{
+				read: 'ke',
+				hira: 'け',
+				kata: 'ケ'
+			},
+			{
+				read: 'ko',
+				hira: 'こ',
+				kata: 'コ'
+			},
+			{
+				read: 'sa',
+				hira: 'さ',
+				kata: 'タ'
+			},
+			{
+				read: 'shi',
+				hira: 'し',
+				kata: 'シ'
+			},
+			{
+				read: 'su',
+				hira: 'す',
+				kata: 'ス'
+			},
+			{
+				read: 'se',
+				hira: 'せ',
+				kata: 'セ'
+			},
+			{
+				read: 'so',
+				hira: 'そ',
+				kata: 'ソ'
+			},
+			{
+				read: 'ta',
+				hira: 'た',
+				kata: 'タ'
+			},
+			{
+				read: 'chi',
+				hira: 'ち',
+				kata: 'タ'
+			},
+			{
+				read: 'tsu',
+				hira: 'つ',
+				kata: 'ツ'
+			},
+			{
+				read: 'te',
+				hira: 'て',
+				kata: 'ツ'
+			},
+			{
+				read: 'to',
+				hira: 'と',
+				kata: 'ト'
+			},
+			{
+				read: 'na',
+				hira: 'な',
+				kata: 'ナ'
+			},
+			{
+				read: 'ni',
+				hira: 'に',
+				kata: 'ニ'
+			},
+			{
+				read: 'nu',
+				hira: 'ぬ',
+				kata: 'ヌ'
+			},
+			{
+				read: 'ne',
+				hira: 'ね',
+				kata: 'ネ'
+			},
+			{
+				read: 'no',
+				hira: 'の',
+				kata: 'ノ'
+			},
+			{
+				read: 'ha',
+				hira: 'は',
+				kata: 'ハ'
+			},
+			{
+				read: 'hi',
+				hira: 'ひ',
+				kata: 'ヒ'
+			},
+			{
+				read: 'fu',
+				hira: 'ふ',
+				kata: 'フ'
+			},
+			{
+				read: 'he',
+				hira: 'へ',
+				kata: 'ヘ'
+			},
+			{
+				read: 'ho',
+				hira: 'ほ',
+				kata: 'ホ'
+			},
+			{
+				read: 'ma',
+				hira: 'ま',
+				kata: 'マ'
+			},
+			{
+				read: 'mi',
+				hira: 'み',
+				kata: 'ミ'
+			},
+			{
+				read: 'mu',
+				hira: 'む',
+				kata: 'ム'
+			},
+			{
+				read: 'me',
+				hira: 'め',
+				kata: 'メ'
+			},
+			{
+				read: 'mo',
+				hira: 'も',
+				kata: 'モ'
+			},
+			{
+				read: 'ya',
+				hira: 'や',
+				kata: 'ヤ'
+			},
+			{
+				read: 'yu',
+				hira: 'ゆ',
+				kata: 'ユ'
+			},
+			{
+				read: 'yo',
+				hira: 'よ',
+				kata: 'ヨ'
+			},
+			{
+				read: 'ra',
+				hira: 'ら',
+				kata: 'ラ'
+			},
+			{
+				read: 'ri',
+				hira: 'り',
+				kata: 'リ'
+			},
+			{
+				read: 'ru',
+				hira: 'る',
+				kata: 'ル'
+			},
+			{
+				read: 're',
+				hira: 'れ',
+				kata: 'レ'
+			},
+			{
+				read: 'ro',
+				hira: 'ろ',
+				kata: 'ロ'
+			},
+			{
+				read: 'wa',
+				hira: 'わ',
+				kata: 'ワ'
+			}, 
+			{
+				read: 'wo',
+				hira: 'を',
+				kata: 'ヲ'
+			}, 
+			{
+				read: 'n',
+				hira: 'ん',
+				kata: 'ン'
+			}
+		];
+
+		function resetView() {
+			document.getElementById('read').innerHTML = '';
+			document.getElementById('write').innerHTML = '';
+			document.getElementById('show-read').innerHTML = '';
+			document.getElementById('show-hira').innerHTML = '';
+			document.getElementById('show-kata').innerHTML = '';
+		}
+
+		function show() {
+			if (current) {
+				document.getElementById('show-read').innerHTML = "Read: "+current['read'];
+				document.getElementById('show-hira').innerHTML = 'Hiragana: '+current['hira'];
+				document.getElementById('show-kata').innerHTML = 'Katakana: '+current['kata'];
+			}
+		}
+
+		function changeType() {
+		 	type = type === KATA ? HIRA : KATA;
+			document.getElementById('type').innerHTML = type;
+		 	resetView();
+		}
+
+		function changeMode() {
+			mode = mode === WRITE ? READ : WRITE;
+			document.getElementById('mode').innerHTML = mode;
+			resetView();
+		}
+
+		function next()  {
+			resetView()
+			let length = data.length;
+			let ran = Math.floor(Math.random() * length);
+			let dataObj = data[ran];
+			current = dataObj;
+			if (mode === WRITE) {
+				document.getElementById('read').innerHTML = dataObj[type];
+			} else {
+				document.getElementById('write').innerHTML = dataObj[mode];
+			}
+		}
+
+	</script>
+</body>
+</html>
