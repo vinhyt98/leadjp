@@ -3,6 +3,7 @@
 <head>
 	<title></title>
 	<style type="text/css">
+
 		html, body {
 			height: 100%;
 			width: 100%
@@ -34,7 +35,7 @@
 		}
 
 		.mode {
-			margin-top: 14px 
+			margin-top: 14px;
 		}
 
 		button {
@@ -54,6 +55,30 @@
 
 		.show-item {
 			margin: 12px
+		}
+
+
+		@media (max-width: 800px){
+			.item {
+				width: 200px;
+				height: 200px;
+				font-size: 44px;
+			}
+
+			button {
+				width: 300px;
+				height: 60px;
+				font-size: 30px;
+				margin: 6px 0;
+			}
+
+			.mode {
+				display: flex;
+				flex-direction: column;
+				justify-content: center;
+				align-items: center;
+			}
+
 		}
 	</style>
 </head>
